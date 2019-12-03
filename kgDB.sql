@@ -16,6 +16,14 @@
 CREATE DATABASE IF NOT EXISTS `kitchgym` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `kitchgym`;
 
+-- Dumping structure for table kitchgym.exercise
+CREATE TABLE IF NOT EXISTS `exercise` (
+  `exercise_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) DEFAULT NULL,
+  `muscle` int(11) DEFAULT NULL,
+  PRIMARY KEY (`exercise_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 -- Dumping data for table kitchgym.exercise: ~51 rows (approximately)
 /*!40000 ALTER TABLE `exercise` DISABLE KEYS */;
 INSERT INTO `exercise` (`exercise_id`, `name`, `muscle`) VALUES
@@ -72,6 +80,18 @@ INSERT INTO `exercise` (`exercise_id`, `name`, `muscle`) VALUES
 	(52, 'Hang Clean', 3);
 /*!40000 ALTER TABLE `exercise` ENABLE KEYS */;
 
+-- Dumping structure for table kitchgym.user
+CREATE TABLE IF NOT EXISTS `user` (
+  `user_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) DEFAULT NULL,
+  `username` varchar(45) DEFAULT NULL,
+  `password` varchar(45) DEFAULT NULL,
+  `goal_weight` int(11) DEFAULT NULL,
+  `start_date` date DEFAULT NULL,
+  `curr_weight` int(11) DEFAULT NULL,
+  PRIMARY KEY (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
 -- Dumping data for table kitchgym.user: ~3 rows (approximately)
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
 INSERT INTO `user` (`user_id`, `name`, `username`, `password`, `goal_weight`, `start_date`, `curr_weight`) VALUES
@@ -80,6 +100,16 @@ INSERT INTO `user` (`user_id`, `name`, `username`, `password`, `goal_weight`, `s
 	(3, 'Kaedon Hamm', 'khamm', 'pass', 178, NULL, 167);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 
+-- Dumping structure for table kitchgym.we_table
+CREATE TABLE IF NOT EXISTS `we_table` (
+  `workout_id` int(11) NOT NULL,
+  `exercise_id` int(11) NOT NULL,
+  KEY `w_id` (`workout_id`),
+  KEY `e_id` (`exercise_id`),
+  CONSTRAINT `e_id` FOREIGN KEY (`exercise_id`) REFERENCES `exercise` (`exercise_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `w_id` FOREIGN KEY (`workout_id`) REFERENCES `workout` (`workout_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 -- Dumping data for table kitchgym.we_table: ~3 rows (approximately)
 /*!40000 ALTER TABLE `we_table` DISABLE KEYS */;
 INSERT INTO `we_table` (`workout_id`, `exercise_id`) VALUES
@@ -87,6 +117,14 @@ INSERT INTO `we_table` (`workout_id`, `exercise_id`) VALUES
 	(0, 3),
 	(0, 16);
 /*!40000 ALTER TABLE `we_table` ENABLE KEYS */;
+
+-- Dumping structure for table kitchgym.workout
+CREATE TABLE IF NOT EXISTS `workout` (
+  `workout_id` int(11) NOT NULL,
+  `name` varchar(50) DEFAULT NULL,
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY (`workout_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Dumping data for table kitchgym.workout: ~1 rows (approximately)
 /*!40000 ALTER TABLE `workout` DISABLE KEYS */;
