@@ -26,6 +26,7 @@ class User extends Component {
         this.state = {
             viewWork: false,
             viewProfile: false,
+            createWork: false,
             user: [],
         }
         this.goBack = this.goBack.bind(this);
@@ -38,6 +39,10 @@ class User extends Component {
 
     goToViewWorkouts = () => {
         this.setState({ viewWork: true });
+    }
+
+    goToCreateWorkout = () => {
+        this.setState({ createWork: true });
     }
 
     goToProfile = () => {
@@ -63,6 +68,7 @@ class User extends Component {
     const {
         viewWork, 
         viewProfile,
+        createWork,
         user
     } = this.state;
     const {id} =this.props.location.state;
@@ -81,6 +87,13 @@ class User extends Component {
                             pathname: '/profile',
                             state: {id: id}
                 }}/>
+    }
+    if (createWork){
+        return <Redirect to={{
+                            pathname: '/workoutcreator',
+                            state: {id: id}
+        }}/>
+        //this.props.history.push('/workoutcreator');
     }
 
     return (
@@ -104,9 +117,20 @@ class User extends Component {
                     color="primary"
                     margin="normal"
                     size="large"
+                    onClick={this.goToCreateWorkout}
+                >
+                    Create Workout
+                </Button>
+            </div>
+            <div>
+                <Button className={classes.button}
+                    variant="contained"
+                    color="primary"
+                    margin="normal"
+                    size="large"
                     onClick={this.goToViewWorkouts}
                 >
-                    View Workouts
+                    Saved Workouts
                 </Button>
             </div>
             <div>
@@ -117,7 +141,7 @@ class User extends Component {
                     size="large"
                     onClick={this.goToProfile}
                 >
-                    View Profile
+                    Fitness Profile
                 </Button>
             </div>
         </div>

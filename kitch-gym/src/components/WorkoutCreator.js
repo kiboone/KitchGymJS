@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as  Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Link, Redirect } from 'react-router-dom';
 import '.././App.css';
 import { withStyles } from '@material-ui/styles';
 import PropTypes from 'prop-types';
@@ -12,6 +12,7 @@ import {
     FormGroup,
     FormControl,
     FormControlLabel,
+    FormLabel,
     Checkbox,
     TextField,
     Dialog,
@@ -20,6 +21,8 @@ import {
     DialogContentText,
     DialogTitle,
     Typography,
+    Select,
+    MenuItem,
     List,
     ListItem
 } from '@material-ui/core';
@@ -86,7 +89,7 @@ class WorkoutCreator extends Component {
         const { id } = this.props.location.state;
         const client_id = event.target.clientid.value;
         const name = event.target.workoutName.value;
-        event.preventDefault();
+        //event.preventDefault();
 
         var count = 0;
         for (var i = 0; i < targetMuscles.length;i++){
@@ -122,17 +125,18 @@ class WorkoutCreator extends Component {
 
 
         this.setState({isGenerated: true});
-        window.location.reload(true); 
+        // window.location.reload(true); 
     }
 
-    createWorkout = (t_id, c_id, name) =>{
-        fetch(`http://localhost:4000/workouts/create?name=${name}&c_id=${c_id}&t_id=${t_id}` )
+    createWorkout = (name) =>{
+        const {id} = this.props.location.state;
+        fetch(`http://localhost:4000/workouts/create?name=${name}&u_id=${id}` )
         .then(response => response.json())
         .catch(err => console.error(err));
     }
 
     getWorkoutID = () =>{
-        fetch(`http://localhost:4000/workouts/get/workout`)
+        fetch(`http://localhost:4000/get/workout`)
         .then(response => response.json())
         .then(({data}) => {
             console.log(data)
@@ -142,19 +146,11 @@ class WorkoutCreator extends Component {
     }
 
     fillWorkout = (muscle, total, w_id) => {
-        fetch(`http://localhost:4000/workouts/get/exercises?muscle=${muscle}&total=${total}&w_id=${w_id}` )
+        fetch(`http://localhost:4000/workouts/fill?muscle=${muscle}&total=${total}&w_id=${w_id}` )
         .then(response => response.json())
         .catch(err => console.error(err));
     }
-    getClients = () => {
-        fetch('http://localhost:4000/clients' )
-          .then(response => response.json())
-          .then(({data}) => {
-            this.setState({ clients: data })
-          } )
-          .catch(err => console.error(err));
-      }
-
+    
     handleClose = () => {
         this.setState({isGenerated: false});
     }
@@ -175,35 +171,23 @@ class WorkoutCreator extends Component {
         this.setState({targetMuscles: tM});
     }
     
-    handleDifficulty = (event) => {
-        this.setState({ difficulty: event.target.value })
-    }
-
-    handleExerType = (event) => {
-        this.setState({ exerType: event.target.value })
-    }
-
 
     componentDidMount = () => {
         this.getWorkoutID();      
-        this.getClients();  
       }
 
   render() {
     const { classes } = this.props;
-    const { userType, id } = this.props.location.state;
+    const { id } = this.props.location.state;
     const {
         isGenerated,
-        difficulty,
-        exerType,
         back,
-        clients,
     } = this.state;
 
     if(back){
         return <Redirect to={{
-          pathname: '/trainer',
-          state: {userType: 'trainer', id: id}
+          pathname: '/user',
+          state: { id: id}
         }}/>
       }
     
@@ -232,16 +216,7 @@ class WorkoutCreator extends Component {
                     label="Workout Name"
                     id="workoutName"
                     margin="normal"
-                />
-                <TextField
-                    className={classes.nameInput}
-                    required
-                    label="Client ID"
-                    id="clientid"
-                    margin="normal"
-                    type="number"
-                />
-    
+                />    
                 <div className={classes.nameHeader}>
                     <h2>
                         Choose target muscle groups
@@ -308,30 +283,6 @@ class WorkoutCreator extends Component {
                 </Button>
             </FormControl>
             </form>
-
-            <div className={classes.panel}>
-                <ExpansionPanel>
-                    <ExpansionPanelSummary
-                        expandIcon={<ExpandMoreIcon />}
-                        aria-label="Expand"
-                        aria-controls="additional-actions1-content"
-                        id="additional-actions1-header"
-                    >
-                        Client List
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>
-                    <Typography color="textSecondary">
-                        <List>
-                            {clients.map(client => (
-                                <ListItem>{client.name} : {client.client_id}</ListItem>
-                            ))}
-
-                        </List>
-                    </Typography>
-                    </ExpansionPanelDetails>
-                </ExpansionPanel>
-            </div>
-
 
             <Dialog
                 open={isGenerated}

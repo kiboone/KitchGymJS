@@ -49,24 +49,25 @@ class Profile extends Component {
         event.preventDefault();
         const weightCurr = event.target.weightCurr.value;
         const weightGoal = event.target.weightGoal.value;
-        const {id } = this.props.location.state;
         if(weightCurr !== ""){
-            this.updateCurrent(weightCurr, id);
+            this.updateCurrent(weightCurr);
         }
         if(weightGoal !== ""){
-            this.updateGoal(weightGoal, id);
+            this.updateGoal(weightGoal);
         }    
         window.location.reload(true); 
     }
 
-    updateCurrent = (weight, id) => {
-        fetch(`http://localhost:4000/update/current?curr_weight=${weight}&c_id=${id}`)
+    updateCurrent = (weight) => {
+        const {id } = this.props.location.state;
+        fetch(`http://localhost:4000/update/current?cur_weight=${weight}&u_id=${id}`)
         .then(response => response.json())
         .catch(err => console.error(err));
     }
 
-    updateGoal = (weight, id) => {
-        fetch(`http://localhost:4000/update/goal?goal_weight=${weight}&c_id=${id}`)
+    updateGoal = (weight) => {
+        const {id } = this.props.location.state;
+        fetch(`http://localhost:4000/update/goal?goal_weight=${weight}&u_id=${id}`)
         .then(response => response.json())
         .catch(err => console.error(err));
     }
@@ -74,7 +75,7 @@ class Profile extends Component {
 
     getUser = () =>{
         const {id } = this.props.location.state;
-        fetch(`http://localhost:4000/get/client?c_id=${id}`)
+        fetch(`http://localhost:4000/get/user?u_id=${id}`)
         .then(response => response.json())
         .then(({data}) => {
             this.setState({ user: data })
@@ -104,7 +105,7 @@ class Profile extends Component {
     var weightCurr;
     var weightGoal;
     if(user.length > 0) {
-        weightCurr = user[0].cur_weight;
+        weightCurr = user[0].curr_weight;
         weightGoal = user[0].goal_weight;
     }
 

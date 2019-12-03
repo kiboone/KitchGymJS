@@ -130,6 +130,90 @@ app.get('/workouts/delete', (req, res) => {
     });
 });
 
+app.get('/get/workout', (req, res) => {
+    const GET_WORKOUT = `SELECT workout_id AS last_id FROM workout ORDER BY workout_id DESC LIMIT 1;`;
+    connection.query(GET_WORKOUT, (err, results) => {
+        if(err)
+            return res.send(err);
+        else {
+            console.log('Workout ID retrieved');
+            return res.json({
+                data: results
+            })
+        }
+    })
+});
+
+app.get('/workouts/create', (req, res) => {
+    const {u_id, name} = req.query;
+    const ADD_WORKOUT = `INSERT INTO workout(name, user_id) VALUES(\'${name}\', ${u_id})`;
+    connection.query(ADD_WORKOUT, (err, results) => {
+        if(err)
+            return res.send(err);
+        else {
+            console.log('Workout created')
+        }
+    })
+
+});
+
+app.get('/workouts/fill', (req, res) => {
+    const {muscle, total, w_id} = req.query;
+    const GET_EX = `CREATE OR REPLACE VIEW temp_exercises AS SELECT exercise_id FROM exercise WHERE exercise.muscle= ${muscle} ORDER BY RAND() LIMIT ${total}`;
+    connection.query(GET_EX, (err, results) => {
+        if(err)
+            return res.send(err);
+        else {
+            console.log('Target exercises retrieved')
+        }
+    })
+
+    const PUT_EX = `INSERT INTO we_table(workout_id, exercise_id) SELECT ${w_id}, exercise_id FROM temp_exercises`;
+    connection.query(PUT_EX, (err, results) => {
+        if(err)
+            return res.send(err);
+        else {
+            console.log('Target exercises placed')
+            return res.json({
+                data: results
+            })
+        }
+    })
+});
+
+
+app.get('/update/current', (req, res) => {
+    const {cur_weight, u_id} = req.query;
+    const UPDATE_CURR  = `UPDATE user SET curr_weight=${cur_weight} WHERE user_id=${u_id}`;
+    connection.query(UPDATE_CURR, (err, results) => {
+        if(err){
+            console.log(err)
+            return res.send(err);
+        } else {
+            console.log('user current weight updated')
+            return res.json({
+                data: results
+            })
+        }
+    });
+});
+
+app.get('/update/goal', (req, res) => {
+    const {goal_weight, u_id} = req.query;
+    const UPDATE_GOAL  = `UPDATE user SET goal_weight=${goal_weight} WHERE user_id=${u_id}`;
+    connection.query(UPDATE_GOAL, (err, results) => {
+        if(err){
+            console.log(err)
+            return res.send(err);
+        }else {
+            console.log('user goal weight updated')
+            return res.json({
+                data: results
+            })
+        }
+    });
+});
+
 
 
 app.listen(4000, () => {
