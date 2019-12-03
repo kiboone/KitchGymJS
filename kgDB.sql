@@ -11,6 +11,11 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
+
+-- Dumping database structure for kitchgym
+CREATE DATABASE IF NOT EXISTS `kitchgym` /*!40100 DEFAULT CHARACTER SET utf8 */;
+USE `kitchgym`;
+
 -- Dumping data for table kitchgym.exercise: ~51 rows (approximately)
 /*!40000 ALTER TABLE `exercise` DISABLE KEYS */;
 INSERT INTO `exercise` (`exercise_id`, `name`, `muscle`) VALUES
