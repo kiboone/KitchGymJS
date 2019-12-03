@@ -66,18 +66,19 @@ class WorkoutViewer extends Component {
       this.setState({back: true});
     }
 
-    getWorkouts = (id) =>{
-      fetch(`http://localhost:4000/workouts?t_id=${id}` )
+    getUserWorkouts = () =>{
+      const { id } = this.props.location.state;
+      fetch(`http://localhost:4000/workouts?u_id=${id}` )
       .then(response => response.json())
       .then(({data}) => {
-        console.log(data);
         this.setState({ workouts: data })
       } )
       .catch(err => console.error(err));
     }
 
-    getWorkoutCount = (id) =>{
-      fetch(`http://localhost:4000/workouts/count?t_id=${id}` )
+    getUserWorkoutCount = () =>{
+      const { id } = this.props.location.state;
+      fetch(`http://localhost:4000/workouts/count?u_id=${id}` )
       .then(response => response.json())
       .then(({data}) => {
         console.log(data[0]);
@@ -86,37 +87,10 @@ class WorkoutViewer extends Component {
       .catch(err => console.error(err));
     }
 
-    getClientWorkouts = (id) =>{
-      fetch(`http://localhost:4000/workouts/client?c_id=${id}` )
-      .then(response => response.json())
-      .then(({data}) => {
-        this.setState({ workouts: data })
-      } )
-      .catch(err => console.error(err));
-    }
 
-    getClientWorkoutCount = (id) =>{
-      fetch(`http://localhost:4000/workouts/client/count?c_id=${id}` )
-      .then(response => response.json())
-      .then(({data}) => {
-        console.log(data[0]);
-        this.setState({ count: data[0].count })
-      } )
-      .catch(err => console.error(err));
-    }
-
-    getAllExercises = (t_id) =>{
-      fetch(`http://localhost:4000/workouts/allexercises?t_id=${t_id}` )
-      .then(response => response.json())
-      .then(({data}) => {
-        console.log(data);
-        this.setState({exercises: data});
-      } )
-      .catch(err => console.error(err));
-    }
-
-    getAllClientExercises = (c_id) =>{
-      fetch(`http://localhost:4000/workouts/client/allexercises?c_id=${c_id}` )
+    getAllUserExercises = () =>{
+      const { id } = this.props.location.state;
+      fetch(`http://localhost:4000/workouts/get/allexercises?u_id=${id}` )
       .then(response => response.json())
       .then(({data}) => {
         console.log(data);
@@ -150,22 +124,15 @@ class WorkoutViewer extends Component {
     }
 
     componentDidMount = () => {
-      const{id, userType} = this.props.location.state;
-      if (userType === "client"){
-        this.getClientWorkouts(id);
-        this.getAllClientExercises(id);
-        this.getClientWorkoutCount(id);
-      } else if (userType === "trainer"){
-        this.getWorkouts(id);
-        this.getAllExercises(id);
-        this.getWorkoutCount(id);
-      } 
+      this.getAllUserExercises();
+      this.getUserWorkoutCount();
+      this.getUserWorkouts();
     }
 
 
   render() {
     const { classes } = this.props;
-    const { userType, id } = this.props.location.state;
+    const { id } = this.props.location.state;
     const { 
       workouts, 
       exercises,
