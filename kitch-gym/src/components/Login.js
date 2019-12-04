@@ -97,7 +97,7 @@ class Login extends Component {
       if (username === users[i].username){
         if(password === users[i].password){
             // this.props.history.push('/client', {id: users[i].id});
-            console.log(users[i].id);
+            console.log(users[i].user_id);
             this.setState({validLogin: true, id: users[i].user_id});
         }
       }
