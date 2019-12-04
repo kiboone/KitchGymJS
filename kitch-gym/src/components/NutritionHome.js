@@ -3,7 +3,13 @@ import { BrowserRouter as Router, Switch, Route, Link, Redirect } from 'react-ro
 import '.././App.css';
 import { withStyles } from '@material-ui/styles';
 import PropTypes from 'prop-types';
-import { Button, TextField } from '@material-ui/core';
+import { 
+    Button, 
+    TextField,
+    List,
+    ListItem,
+    Divider
+ } from '@material-ui/core';
 import NutritionFacts from 'nutrition-facts'
 
 
@@ -26,6 +32,7 @@ class NutritionHome extends Component {
         super(props);
         this.state = {
             back: false,
+            results: [],
             user: [],
         }
         this.goBack = this.goBack.bind(this);
@@ -38,16 +45,32 @@ class NutritionHome extends Component {
             q: food,
             ds: 'Standard Reference'
         }).then(results => {
+            console.log(results.list.item)
+            this.setState({results: results.list.item});
             // Returns search results
-            let mySelectedItem = results.list.item[0]
-            // Items are returned as a FoodItem instance
-            // allowing you to call 'getNutrition' directly on the instance.
-            mySelectedItem.getNutrition()
-            .then(nutritionReport => {
-                console.log(nutritionReport.nutrients[2].value)})
-            .catch(err => {
-                console.log(err)})
+                for(var i = 0; i < results.list.item.length; i++){
+                let mySelectedItem = results.list.item[i];
+                // console.log("printing")
+                // Items are returned as a FoodItem instance
+                // allowing you to call 'getNutrition' directly on the instance.
+                mySelectedItem.getNutrition()
+                .then(nutritionReport => {
+                    // console.log(nutritionReport)
+                    this.showNutrition(nutritionReport)
+                })    
+                .catch(err => {
+                    console.log(err)})
+                }
         }).catch(err => { console.log(err)})
+    }
+
+    showNutrition = (nutritionReport) => {
+        // console.log(nutritionReport);
+        var name = nutritionReport.name;
+        var div = document.getElementById("list")
+        var element = document.createElement('ListItem');
+        element.innerHTML = name;
+        div.appendChild(element);
     }
 
     handleSearch = (event) => {
@@ -58,6 +81,15 @@ class NutritionHome extends Component {
 
     goBack = () => {
         this.setState({ back: true})
+    }
+
+    getNutrition = (mySelectedItem) => {
+        mySelectedItem.getNutrition()
+        .then(nutritionReport => {
+            return (<p>{nutritionReport.name}</p>)
+        })
+        .catch(err => {
+            console.log(err)})
     }
 
     getUser = () =>{
@@ -79,12 +111,12 @@ class NutritionHome extends Component {
     const { classes } = this.props;
     const {
         back,
-        user
+        user,
+        results
     } = this.state;
     const {id} =this.props.location.state;
 
     var name, current_weight, goal_weight, message;
-    if (user.length > 0) name = user[0].name;
     if(back){
         return <Redirect to={{
             pathname: '/user',
@@ -97,32 +129,35 @@ class NutritionHome extends Component {
     if (current_weight < goal_weight) message = "Bulking Season"
     else message = "Cutting Season"
 
+    
+
     return (
         <div className="App">
-            <h1 className="App-header">
-                    Current Weight: {current_weight}                                    
-            </h1>
-            <h2 className="App-header">
-                    Goal Weight: {goal_weight}                    
-            </h2>
-            <p>{message}</p>
-            <form onSubmit = {this.handleSearch}>
-                <span>
-                <TextField
-                    margin="normal"
-                    id="search"
-                    label="Enter Food">
-                </TextField>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    size="medium"
-                    type='submit'
-                >
-                Search
-            </Button>
-            </span>
-            </form>
+            <header className="App-header">
+                <h1>
+                   Nutrition Home                 
+                </h1>
+            </header>
+            <div>
+                <form onSubmit = {this.handleSearch}>
+                    <TextField
+                        margin="normal"
+                        id="search"
+                        label="Enter Food">
+                    </TextField>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        size="medium"
+                        type='submit'
+                    >
+                        Search
+                    </Button>
+                </form>
+            </div>
+            <List id="list">
+
+            </List>
             <Button className={classes.backBut}
                 variant="contained"
                 color="primary"
