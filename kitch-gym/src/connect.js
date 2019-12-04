@@ -226,6 +226,22 @@ app.get('/update/goal', (req, res) => {
     });
 });
 
+app.get('/update/calories', (req, res) => {
+    const {cals, u_id} = req.query;
+    const UPDATE_CALS  = `UPDATE user SET daily_cals=${cals} WHERE user_id=${u_id}`;
+    connection.query(UPDATE_CALS, (err, results) => {
+        if(err){
+            console.log(err)
+            return res.send(err);
+        }else {
+            console.log('user calories updated')
+            return res.json({
+                data: results
+            })
+        }
+    });
+});
+
 
 
 app.listen(4000, () => {

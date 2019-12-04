@@ -130,17 +130,27 @@ class NutritionHome extends Component {
         this.doSearch(search);
     }
 
+    addMacros = (searchResult) => {
+        //Proteins: searchResult.nutrients[2].value
+        //Carbs: searchResult.nutrients[4].value
+        //Fats: parseInt(searchResult.nutrients[27].value) + parseInt(searchResult.nutrients[28].value)
+    //////////////////////////////////////////
+        // CALORIE CALCULATION HERE
+    //////////////////////////////////////
+    
+        //this.updateCalories(calories);
+    }
+
+
     goBack = () => {
         this.setState({ back: true})
     }
 
-    getNutrition = (mySelectedItem) => {
-        mySelectedItem.getNutrition()
-        .then(nutritionReport => {
-            return (<p>{nutritionReport.name}</p>)
-        })
-        .catch(err => {
-            console.log(err)})
+    updateCalories = (calories) => {
+        const {id} = this.props.location.state;
+        fetch(`http://localhost:4000/update/calories?cals=${calories}&u_id=${id}`)
+        .then(response => response.json())
+        .catch(err => console.error(err));
     }
 
     getUser = () =>{
@@ -168,18 +178,23 @@ class NutritionHome extends Component {
     } = this.state;
     const {id} =this.props.location.state;
 
-    var name, current_weight, goal_weight, message;
+    
     if(back){
         return <Redirect to={{
             pathname: '/user',
             state: {id: id}
         }}/>
     }
-    if (user.length > 0) current_weight = user[0].curr_weight;
-    if (user.length > 0) goal_weight = user[0].goal_weight;
 
-    if (current_weight < goal_weight) message = "Bulking Season"
-    else message = "Cutting Season"
+    var name, current_weight, goal_weight, daily_cals;
+    if (user.length > 0) {
+        current_weight = user[0].curr_weight;
+        goal_weight = user[0].goal_weight;
+        daily_cals = user[0].daily_cals;
+    };
+
+    // if (current_weight < goal_weight) message = "Bulking Season"
+    // else message = "Cutting Season"
 
     console.log(searchResult)
 
@@ -190,6 +205,9 @@ class NutritionHome extends Component {
                    Nutrition Home                 
                 </h1>
             </header>
+            <h2>
+                Total Calories for Today: {daily_cals}
+            </h2>
             <div>
                 <form onSubmit = {this.handleSearch}>
                     <TextField
@@ -210,25 +228,35 @@ class NutritionHome extends Component {
             <List id="list"></List>
             <Grid>
                 {done && (
-                    <ExpansionPanel id="result">
-                    <ExpansionPanelSummary
-                        expandIcon={<ExpandMoreIcon />}
-                        aria-label="Expand"
-                        aria-controls="additional-actions1-content"
-                        id="additional-actions1-header"
-                    >
-                        {searchResult.name}
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>
-                        <Typography color="textSecondary" className={classes.list}>
-                            <ul>
-                                <li>Proteins: {searchResult.nutrients[2].value}</li>
-                                <li>Carbs: {searchResult.nutrients[4].value}</li>
-                                <li>Fats: {parseInt(searchResult.nutrients[27].value) + parseInt(searchResult.nutrients[28].value)}</li>
-                            </ul>
-                        </Typography>
-                        </ExpansionPanelDetails>
-                    </ExpansionPanel>
+                    <div>
+                        <ExpansionPanel id="result">
+                        <ExpansionPanelSummary
+                            expandIcon={<ExpandMoreIcon />}
+                            aria-label="Expand"
+                            aria-controls="additional-actions1-content"
+                            id="additional-actions1-header"
+                        >
+                            {searchResult.name}
+                        </ExpansionPanelSummary>
+                        <ExpansionPanelDetails>
+                            <Typography color="textSecondary" className={classes.list}>
+                                <ul>
+                                    <li>Proteins: {searchResult.nutrients[2].value} grams</li>
+                                    <li>Carbs: {searchResult.nutrients[4].value} grams</li>
+                                    <li>Fats: {parseInt(searchResult.nutrients[27].value) + parseInt(searchResult.nutrients[28].value)} grams</li>
+                                </ul>
+                            </Typography>
+                            </ExpansionPanelDetails>
+                        </ExpansionPanel>
+                        <Button 
+                            button 
+                            id="delete"
+                            color="secondary"
+                            onClick={() => this.addMacros(searchResult)}
+                        >
+                            Add Macros
+                        </Button>
+                    </div>
                 )}
             </Grid>
             <Button className={classes.backBut}
