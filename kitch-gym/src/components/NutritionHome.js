@@ -131,14 +131,18 @@ class NutritionHome extends Component {
     }
 
     addMacros = (searchResult) => {
-        //Proteins: searchResult.nutrients[2].value
-        //Carbs: searchResult.nutrients[4].value
-        //Fats: parseInt(searchResult.nutrients[27].value) + parseInt(searchResult.nutrients[28].value)
-    //////////////////////////////////////////
-        // CALORIE CALCULATION HERE
-    //////////////////////////////////////
-    
-        //this.updateCalories(calories);
+        var proteins = parseInt(searchResult.nutrients[2].value)
+        var carbs = parseInt(searchResult.nutrients[4].value)
+        var fats = parseInt(searchResult.nutrients[27].value) + parseInt(searchResult.nutrients[28].value)
+        
+        // Calorie Calculation:
+        //      1g protein = 4 cals
+        //      1g carbs = 4 cals
+        //      1g fats = 9 cals
+        var total_cals = (proteins * 4) + (carbs * 4) + (fats * 9)
+
+        this.updateCalories(total_cals);
+        window.location.reload(true)
     }
 
 
