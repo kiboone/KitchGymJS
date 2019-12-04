@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS `exercise` (
   `name` varchar(45) DEFAULT NULL,
   `muscle` int(11) DEFAULT NULL,
   PRIMARY KEY (`exercise_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8;
 
 -- Dumping data for table kitchgym.exercise: ~51 rows (approximately)
 /*!40000 ALTER TABLE `exercise` DISABLE KEYS */;
@@ -80,6 +80,12 @@ INSERT INTO `exercise` (`exercise_id`, `name`, `muscle`) VALUES
 	(52, 'Hang Clean', 3);
 /*!40000 ALTER TABLE `exercise` ENABLE KEYS */;
 
+-- Dumping structure for view kitchgym.temp_exercises
+-- Creating temporary table to overcome VIEW dependency errors
+CREATE TABLE `temp_exercises` (
+	`exercise_id` INT(11) NOT NULL
+) ENGINE=MyISAM;
+
 -- Dumping structure for table kitchgym.user
 CREATE TABLE IF NOT EXISTS `user` (
   `user_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -90,47 +96,89 @@ CREATE TABLE IF NOT EXISTS `user` (
   `start_date` date DEFAULT NULL,
   `curr_weight` int(11) DEFAULT NULL,
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- Dumping data for table kitchgym.user: ~3 rows (approximately)
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
 INSERT INTO `user` (`user_id`, `name`, `username`, `password`, `goal_weight`, `start_date`, `curr_weight`) VALUES
-	(1, 'Kiara Boone', 'kb', 'kb', 135, NULL, 140),
+	(1, 'Kiara Boone', 'kb', 'kb', 130, NULL, 135),
 	(2, 'Lynn Jordan', 'kljb', 'pass', 145, NULL, 140),
-	(3, 'Kaedon Hamm', 'khamm', 'pass', 178, NULL, 167);
+	(3, 'Kaedon Hamm', 'khamm', 'pass', 178, NULL, 167),
+	(4, 'Sarah', 'sb', 'sb', 105, NULL, 100);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 
 -- Dumping structure for table kitchgym.we_table
 CREATE TABLE IF NOT EXISTS `we_table` (
   `workout_id` int(11) NOT NULL,
   `exercise_id` int(11) NOT NULL,
-  KEY `w_id` (`workout_id`),
   KEY `e_id` (`exercise_id`),
-  CONSTRAINT `e_id` FOREIGN KEY (`exercise_id`) REFERENCES `exercise` (`exercise_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  KEY `w_id` (`workout_id`),
   CONSTRAINT `w_id` FOREIGN KEY (`workout_id`) REFERENCES `workout` (`workout_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Dumping data for table kitchgym.we_table: ~3 rows (approximately)
+-- Dumping data for table kitchgym.we_table: ~0 rows (approximately)
 /*!40000 ALTER TABLE `we_table` DISABLE KEYS */;
 INSERT INTO `we_table` (`workout_id`, `exercise_id`) VALUES
-	(0, 2),
-	(0, 3),
-	(0, 16);
+	(52, 22),
+	(52, 18),
+	(52, 24),
+	(52, 2),
+	(52, 6),
+	(52, 7),
+	(52, 26),
+	(52, 5),
+	(52, 23),
+	(52, 25),
+	(52, 8),
+	(52, 21),
+	(53, 24),
+	(53, 23),
+	(53, 18),
+	(53, 6),
+	(53, 5),
+	(53, 21),
+	(53, 40),
+	(53, 37),
+	(53, 15),
+	(53, 38),
+	(53, 42),
+	(53, 13),
+	(54, 2),
+	(54, 18),
+	(54, 6),
+	(54, 23),
+	(54, 21),
+	(54, 22),
+	(54, 5),
+	(54, 26),
+	(54, 7),
+	(54, 25),
+	(54, 8),
+	(54, 24);
 /*!40000 ALTER TABLE `we_table` ENABLE KEYS */;
 
 -- Dumping structure for table kitchgym.workout
 CREATE TABLE IF NOT EXISTS `workout` (
-  `workout_id` int(11) NOT NULL,
+  `workout_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) DEFAULT NULL,
   `user_id` int(11) NOT NULL,
-  PRIMARY KEY (`workout_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`workout_id`),
+  KEY `u_id` (`user_id`),
+  CONSTRAINT `u_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8;
 
--- Dumping data for table kitchgym.workout: ~1 rows (approximately)
+-- Dumping data for table kitchgym.workout: ~5 rows (approximately)
 /*!40000 ALTER TABLE `workout` DISABLE KEYS */;
 INSERT INTO `workout` (`workout_id`, `name`, `user_id`) VALUES
-	(0, 'M/W/F', 1);
+	(52, 'Super Strength', 1),
+	(53, 'Bi-weekly', 1),
+	(54, 'I pUULL', 1);
 /*!40000 ALTER TABLE `workout` ENABLE KEYS */;
+
+-- Dumping structure for view kitchgym.temp_exercises
+-- Removing temporary table and create final VIEW structure
+DROP TABLE IF EXISTS `temp_exercises`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `temp_exercises` AS SELECT exercise_id FROM exercise WHERE exercise.muscle= 0 ORDER BY RAND() LIMIT 12 ;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
