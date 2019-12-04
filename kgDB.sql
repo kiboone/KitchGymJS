@@ -93,18 +93,19 @@ CREATE TABLE IF NOT EXISTS `user` (
   `username` varchar(45) DEFAULT NULL,
   `password` varchar(45) DEFAULT NULL,
   `goal_weight` int(11) DEFAULT NULL,
-  `start_date` date DEFAULT NULL,
+  `start_date` date DEFAULT curdate(),
   `curr_weight` int(11) DEFAULT NULL,
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
--- Dumping data for table kitchgym.user: ~3 rows (approximately)
+-- Dumping data for table kitchgym.user: ~5 rows (approximately)
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
 INSERT INTO `user` (`user_id`, `name`, `username`, `password`, `goal_weight`, `start_date`, `curr_weight`) VALUES
-	(1, 'Kiara Boone', 'kb', 'kb', 130, NULL, 135),
-	(2, 'Lynn Jordan', 'kljb', 'pass', 145, NULL, 140),
-	(3, 'Kaedon Hamm', 'khamm', 'pass', 178, NULL, 167),
-	(4, 'Sarah', 'sb', 'sb', 105, NULL, 100);
+	(1, 'Kiara Boone', 'kb', 'kb', 130, '2019-12-03', 135),
+	(2, 'Lynn Jordan', 'kljb', 'pass', 145, '2019-12-03', 140),
+	(3, 'Kaedon Hamm', 'khamm', 'pass', 178, '2019-12-03', 167),
+	(4, 'Sarah', 'sb', 'sb', 105, '2019-12-03', 100),
+	(5, 'Pull More', 'pullmore', 'pass', 120, '2019-12-03', 100);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 
 -- Dumping structure for table kitchgym.we_table
@@ -116,7 +117,7 @@ CREATE TABLE IF NOT EXISTS `we_table` (
   CONSTRAINT `w_id` FOREIGN KEY (`workout_id`) REFERENCES `workout` (`workout_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Dumping data for table kitchgym.we_table: ~0 rows (approximately)
+-- Dumping data for table kitchgym.we_table: ~36 rows (approximately)
 /*!40000 ALTER TABLE `we_table` DISABLE KEYS */;
 INSERT INTO `we_table` (`workout_id`, `exercise_id`) VALUES
 	(52, 22),
@@ -167,7 +168,7 @@ CREATE TABLE IF NOT EXISTS `workout` (
   CONSTRAINT `u_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8;
 
--- Dumping data for table kitchgym.workout: ~5 rows (approximately)
+-- Dumping data for table kitchgym.workout: ~3 rows (approximately)
 /*!40000 ALTER TABLE `workout` DISABLE KEYS */;
 INSERT INTO `workout` (`workout_id`, `name`, `user_id`) VALUES
 	(52, 'Super Strength', 1),
