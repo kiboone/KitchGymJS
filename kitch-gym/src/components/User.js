@@ -11,12 +11,22 @@ const styles = {
     },
     backBut: {
         position: 'absolute',
-        left: '5px',
-        top: '5px',
+        left: '10px',
+        top: '10px',
     },
     button: {
         margin: '15px',
-    }
+    },
+    button1: {
+        margin: '15px',
+        marginRight: '100px',
+    },
+    button2: {
+        margin: '15px',
+        marginRight: '100px',
+        position: 'relative',
+        right: '9px'
+    },
 
 }
 
@@ -34,7 +44,6 @@ class User extends Component {
     }
 
     goBack = () => {
-        console.log(this.props.history);
         this.props.history.push('/');
     }
 
@@ -123,50 +132,51 @@ class User extends Component {
             >
                 Back
             </Button>
-            <div>
-                <Button className={classes.button}
-                    variant="contained"
-                    color="primary"
-                    margin="normal"
-                    size="large"
-                    onClick={this.goToCreateWorkout}
-                >
-                    Create Workout
-                </Button>
-            </div>
-            <div>
-                <Button className={classes.button}
-                    variant="contained"
-                    color="primary"
-                    margin="normal"
-                    size="large"
-                    onClick={this.goToViewWorkouts}
-                >
-                    Saved Workouts
-                </Button>
-            </div>
-            <div>
-                <Button className={classes.button}
-                    variant="contained"
-                    color="primary"
-                    margin="normal"
-                    size="large"
-                    onClick={this.goToProfile}
-                >
-                    Fitness Profile
-                </Button>
-            </div>
-            <div>
-                <Button className={classes.button}
-                    variant="contained"
-                    color="primary"
-                    margin="normal"
-                    size="large"
-                    onClick={this.goToNutritionHome}
-                >
-                    Input Macros
-                </Button>
-            </div>
+
+            <span  className={classes}>
+                <div>     
+                    <Button className={classes.button1}
+                        variant="contained"
+                        color="primary"
+                        margin="normal"
+                        size="large"
+                        onClick={this.goToCreateWorkout}
+                    >
+                        Create Workout
+                    </Button>
+                    <Button className={classes.button}
+                        variant="contained"
+                        color="primary"
+                        margin="normal"
+                        size="large"
+                        onClick={this.goToProfile}
+                    >
+                        Fitness Profile
+                    </Button>
+                </div>
+                <div>
+                    
+                    <Button className={classes.button2}
+                        variant="contained"
+                        color="primary"
+                        margin="normal"
+                        size="large"
+                        onClick={this.goToViewWorkouts}
+                    >
+                        Saved Workouts
+                    </Button>
+                    <Button className={classes.button}
+                        variant="contained"
+                        color="primary"
+                        margin="normal"
+                        size="large"
+                        onClick={this.goToNutritionHome}
+                    >
+                        Input Macros
+                    </Button>
+                    
+                </div>
+            </span>
         </div>
     );
   }

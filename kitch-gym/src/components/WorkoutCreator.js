@@ -5,14 +5,9 @@ import { withStyles } from '@material-ui/styles';
 import PropTypes from 'prop-types';
 import { 
     Button,
-    Grid,
-    ExpansionPanel,
-    ExpansionPanelDetails,
-    ExpansionPanelSummary,
     FormGroup,
     FormControl,
     FormControlLabel,
-    FormLabel,
     Checkbox,
     TextField,
     Dialog,
@@ -20,19 +15,13 @@ import {
     DialogContent,
     DialogContentText,
     DialogTitle,
-    Typography,
-    Select,
-    MenuItem,
-    List,
-    ListItem
 } from '@material-ui/core';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 const styles = {
     backBut: {
         position: 'absolute',
-        left: '5px',
-        top: '5px',
+        left: '10px',
+        top: '10px',
     },
     panel: {
         margin: 'auto',
@@ -87,8 +76,7 @@ class WorkoutCreator extends Component {
     handleGenerateWorkout = (event) => {
         event.preventDefault();
         console.log("generating workout")
-        const {targetMuscles, isGenerated} = this.state;
-        const { id } = this.props.location.state;
+        const {targetMuscles} = this.state;
         const name = event.target.workoutName.value;
         event.preventDefault();
 
@@ -99,9 +87,8 @@ class WorkoutCreator extends Component {
             }
         }
 
+        // calulate how many of each exercise to pull from database
         const numEach = 12/count;
-        var workout = [];
-
         const{workout_id} = this.state;
         const w_id = workout_id[0].last_id;
         console.log(w_id)
@@ -125,7 +112,6 @@ class WorkoutCreator extends Component {
             this.fillWorkout(3, numEach, w_id);
         }
 
-        // this.setState({isGenerated: true});
         window.location.reload(true); 
     }
 
@@ -140,7 +126,6 @@ class WorkoutCreator extends Component {
         fetch(`http://localhost:4000/get/workout`)
         .then(response => response.json())
         .then(({data}) => {
-            console.log(data)
             this.setState({ workout_id: data })
           } )
         .catch(err => console.error(err));

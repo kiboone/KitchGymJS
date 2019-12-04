@@ -9,30 +9,16 @@ import {
     ExpansionPanel,
     ExpansionPanelDetails,
     ExpansionPanelSummary,
-    List,
-    ListItem,
-    ListItemAvatar,
-    ListItemIcon,
-    ListItemSecondaryAction,
-    IconButton,
-    ListItemText,
-    Checkbox,
     Typography,
-        FormControlLabel,
-        
-
 } from '@material-ui/core';
 
-import DeleteIcon from '@material-ui/icons/Delete';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { thisExpression } from '@babel/types';
-import { all } from 'q';
 import { classes } from 'istanbul-lib-coverage';
 const styles = {
     backBut: {
         position: 'absolute',
-        left: '5px',
-        top: '5px',
+        left: '10px',
+        top: '10px',
     },
     panel: {
         margin: 'auto',
@@ -81,7 +67,6 @@ class WorkoutViewer extends Component {
       fetch(`http://localhost:4000/workouts/count?u_id=${id}` )
       .then(response => response.json())
       .then(({data}) => {
-        console.log(data[0]);
         this.setState({ count: data[0].count })
       } )
       .catch(err => console.error(err));
@@ -93,7 +78,6 @@ class WorkoutViewer extends Component {
       fetch(`http://localhost:4000/workouts/get/allexercises?u_id=${id}` )
       .then(response => response.json())
       .then(({data}) => {
-        console.log(data);
         this.setState({exercises: data});
       } )
       .catch(err => console.error(err));

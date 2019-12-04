@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import NutritionFacts from 'nutrition-facts';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Login from './components/Login';
 import WorkoutViewer from './components/WorkoutViewer';

@@ -5,11 +5,7 @@ import '@material-ui/core';
 import './Login.css';
 import { 
   TextField,
-  Select,
   Button,
-  MenuItem,
-  ButtonGroup,
-  ArrowDropDownIcon,
   withStyles
 } from '@material-ui/core';
 
@@ -78,7 +74,7 @@ class Login extends Component {
     }
 
     if(valid){
-      console.log("adding user")
+      console.log("Adding user");
       this.addUser(name, username, password1, weightCurr, weightGoal);
       window.location.reload(true); 
     }
@@ -92,12 +88,11 @@ class Login extends Component {
     const password = event.target.password.value;
 
     const{ users } = this.state;
-    console.log(users)
     for (var i = 0; i < users.length;i++){
       if (username === users[i].username){
         if(password === users[i].password){
             // this.props.history.push('/client', {id: users[i].id});
-            console.log(users[i].user_id);
+            console.log("User ID:", users[i].user_id);
             this.setState({validLogin: true, id: users[i].user_id});
         }
       }

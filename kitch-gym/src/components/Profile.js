@@ -5,17 +5,14 @@ import { withStyles } from '@material-ui/styles';
 import PropTypes from 'prop-types';
 import { 
     Button,
-    FormControl,
     TextField
-
 } from '@material-ui/core';
 
-import { classes } from 'istanbul-lib-coverage';
 const styles = {
     backBut: {
         position: 'absolute',
-        left: '5px',
-        top: '5px',
+        left: '10px',
+        top: '10px',
     },
     panel: {
         margin: 'auto',
@@ -89,7 +86,7 @@ class Profile extends Component {
 
   render() {
     const { classes } = this.props;
-    const { userType, id } = this.props.location.state;
+    const { id } = this.props.location.state;
     const { 
       back,
       user
@@ -101,10 +98,11 @@ class Profile extends Component {
         state: { id: id}
       }}/>
     }
-    console.log(user);
+
     var weightCurr;
     var weightGoal;
     if(user.length > 0) {
+        console.log("User Data:", user[0]);
         weightCurr = user[0].curr_weight;
         weightGoal = user[0].goal_weight;
     }

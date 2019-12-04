@@ -4,7 +4,7 @@ const mysql = require('mysql');
 
 const app = express();
 
-
+//NEEDS TO BE CHANGED IF USING SERVER OTHER THAN XAMPP
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
@@ -45,7 +45,7 @@ app.get('/get/user', (req, res) => {
         if(err)
             return res.send(err);
         else {
-            console.log('One User retrieved')
+            console.log('User retrieved')
             return res.json({
                 data: results
             })
@@ -161,7 +161,7 @@ app.get('/add/workout', (req, res) => {
         if(err)
             return res.send(err);
         else {
-            console.log('Workout ID retrieved');
+            console.log('Workout ID returned');
             return res.json({
                 data: results
             })
@@ -202,7 +202,7 @@ app.get('/update/current', (req, res) => {
             console.log(err)
             return res.send(err);
         } else {
-            console.log('user current weight updated')
+            console.log('User current weight updated')
             return res.json({
                 data: results
             })
@@ -218,7 +218,7 @@ app.get('/update/goal', (req, res) => {
             console.log(err)
             return res.send(err);
         }else {
-            console.log('user goal weight updated')
+            console.log('User goal weight updated')
             return res.json({
                 data: results
             })
@@ -234,7 +234,7 @@ app.get('/update/calories', (req, res) => {
             console.log(err)
             return res.send(err);
         }else {
-            console.log('user calories updated')
+            console.log('User calories updated')
             return res.json({
                 data: results
             })

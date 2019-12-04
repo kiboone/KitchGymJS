@@ -24,14 +24,23 @@ const styles = {
     },
     backBut: {
         position: 'absolute',
-        left: '5px',
-        top: '5px',
+        left: '10px',
+        top: '10px',
     },
     button: {
         margin: '15px',
     },
     list: {
         textAlign: 'left',
+    },
+    searchButton: {
+        position: 'relative',
+        top: '25px',
+        right: '-20px'
+    },
+    panel: {
+        margin: 'auto',
+        width: '50%',
     }
 
 }
@@ -114,11 +123,7 @@ class NutritionHome extends Component {
                 mySelectedItem.getNutrition()
                 .then(nutritionReport => {
                     // console.log(nutritionReport)
-                    const name = nutritionReport.name;
-                    const proteins = nutritionReport.nutrients[2];
-                    const carbs = nutritionReport.nutrients[4];
-                    this.setState({
-                        searchResult: nutritionReport, done: true})
+                    this.setState({searchResult: nutritionReport, done: true})
                 })    
                 .catch(err => {
                     console.log(err)})
@@ -132,7 +137,7 @@ class NutritionHome extends Component {
         while (div.firstChild) {
             div.removeChild(div.firstChild);
         }
-        this.doSearch(search);
+        if (search !== "") this.doSearch(search);
     }
 
     addMacros = (searchResult) => {
@@ -197,23 +202,16 @@ class NutritionHome extends Component {
         }}/>
     }
 
-    var name, current_weight, goal_weight, daily_cals;
+    var daily_cals;
     if (user.length > 0) {
-        current_weight = user[0].curr_weight;
-        goal_weight = user[0].goal_weight;
         daily_cals = user[0].daily_cals;
     };
-
-    // if (current_weight < goal_weight) message = "Bulking Season"
-    // else message = "Cutting Season"
-
-    console.log(searchResult)
 
     return (
         <div className="App">
             <header className="App-header">
                 <h1>
-                   Nutrition Home                 
+                   Input Your Macros                 
                 </h1>
             </header>
             <h2>
@@ -231,45 +229,52 @@ class NutritionHome extends Component {
                         color="primary"
                         size="medium"
                         type='submit'
+                        className={classes.searchButton}
                     >
                         Search
                     </Button>
                 </form>
-            </div>
+            </div>            
+
+            <h2>
+                Search Results:
+            </h2>
             <List id="list"></List>
-            <Grid>
-                {done && (
-                    <div>
-                        <ExpansionPanel id="result">
-                        <ExpansionPanelSummary
-                            expandIcon={<ExpandMoreIcon />}
-                            aria-label="Expand"
-                            aria-controls="additional-actions1-content"
-                            id="additional-actions1-header"
-                        >
-                            {searchResult.name}
-                        </ExpansionPanelSummary>
-                        <ExpansionPanelDetails>
-                            <Typography color="textSecondary" className={classes.list}>
-                                <ul>
-                                    <li>Proteins: {searchResult.nutrients[2].value} grams</li>
-                                    <li>Carbs: {searchResult.nutrients[4].value} grams</li>
-                                    <li>Fats: {parseFloat(searchResult.nutrients[27].value) + parseFloat(searchResult.nutrients[28].value)} grams</li>
-                                </ul>
-                            </Typography>
-                            </ExpansionPanelDetails>
-                        </ExpansionPanel>
-                        <Button 
-                            button 
-                            id="delete"
-                            color="secondary"
-                            onClick={() => this.addMacros(searchResult)}
-                        >
-                            Add Macros
-                        </Button>
-                    </div>
-                )}
-            </Grid>
+            <div className={classes.panel}>
+                <Grid>
+                    {done && (
+                        <div >
+                            <ExpansionPanel id="result">
+                            <ExpansionPanelSummary
+                                expandIcon={<ExpandMoreIcon />}
+                                aria-label="Expand"
+                                aria-controls="additional-actions1-content"
+                                id="additional-actions1-header"
+                            >
+                                {searchResult.name}
+                            </ExpansionPanelSummary>
+                            <ExpansionPanelDetails>
+                                <Typography color="textSecondary" className={classes.list}>
+                                    <ul>
+                                        <li>Proteins: {searchResult.nutrients[2].value} grams</li>
+                                        <li>Carbs: {searchResult.nutrients[4].value} grams</li>
+                                        <li>Fats: {parseFloat(searchResult.nutrients[27].value) + parseFloat(searchResult.nutrients[28].value)} grams</li>
+                                    </ul>
+                                </Typography>
+                                </ExpansionPanelDetails>
+                            </ExpansionPanel>
+                            <Button 
+                                button 
+                                id="delete"
+                                color="secondary"
+                                onClick={() => this.addMacros(searchResult)}
+                            >
+                                Add Macros
+                            </Button>
+                        </div>
+                    )}
+                </Grid>
+            </div>
             <Button className={classes.backBut}
                 variant="contained"
                 color="primary"
