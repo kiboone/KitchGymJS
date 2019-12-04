@@ -23,14 +23,16 @@
   }
   
   .App-link {
-    color: #09d3ac;
+    color: #FFFFFF;
   }
   
   .container {
     display: 'flex';
     flex-wrap: 'wrap';
+    color: #FFFFFF;
   }
   
   .button {
     margin: 15px;
+    color: #FFFFFF;
   }
