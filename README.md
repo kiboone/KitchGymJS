@@ -1,6 +1,6 @@
 # KitchGymJS
 
-KitchGym is a simple, easy to use solution to calorie-tracking, weight maintenance, and gym activity.
+KitchGym is a web-based application used for personal fitness and nutrition.
 
 The website has a place for users to input the food/calories they are consuming to promote more mindful eating habits.
 
