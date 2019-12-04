@@ -65,13 +65,13 @@ class WorkoutCreator extends Component {
     constructor(props){
         super(props);
         this.state = {
+            id: null,
             targetMuscles: [false, false, false, false],
             isGenerated: false,
             difficulty: 'easy',
             exerType: 'free-weight',
             back: false,
             workout_id: [],
-            clients: [],
         };
 
         this.goBack = this.goBack.bind(this);
@@ -85,11 +85,12 @@ class WorkoutCreator extends Component {
     }
 
     handleGenerateWorkout = (event) => {
+        event.preventDefault();
+        console.log("generating workout")
         const {targetMuscles, isGenerated} = this.state;
         const { id } = this.props.location.state;
-        const client_id = event.target.clientid.value;
         const name = event.target.workoutName.value;
-        //event.preventDefault();
+        event.preventDefault();
 
         var count = 0;
         for (var i = 0; i < targetMuscles.length;i++){
@@ -102,9 +103,10 @@ class WorkoutCreator extends Component {
         var workout = [];
 
         const{workout_id} = this.state;
-        const w_id = workout_id[0].last_id + 1;
+        const w_id = workout_id[0].last_id;
         console.log(w_id)
-        this.createWorkout(id, client_id, name);
+        this.createWorkout(name);
+        console.log(targetMuscles)
 
         if(targetMuscles[0] === true){
             //arms
@@ -123,14 +125,13 @@ class WorkoutCreator extends Component {
             this.fillWorkout(3, numEach, w_id);
         }
 
-
-        this.setState({isGenerated: true});
-        // window.location.reload(true); 
+        // this.setState({isGenerated: true});
+        window.location.reload(true); 
     }
 
     createWorkout = (name) =>{
         const {id} = this.props.location.state;
-        fetch(`http://localhost:4000/workouts/create?name=${name}&u_id=${id}` )
+        fetch(`http://localhost:4000/add/workout?name=${name}&u_id=${id}` )
         .then(response => response.json())
         .catch(err => console.error(err));
     }

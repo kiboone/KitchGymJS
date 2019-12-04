@@ -131,7 +131,7 @@ app.get('/workouts/delete', (req, res) => {
 });
 
 app.get('/get/workout', (req, res) => {
-    const GET_WORKOUT = `SELECT workout_id AS last_id FROM workout ORDER BY workout_id DESC LIMIT 1;`;
+    const GET_WORKOUT = `SELECT AUTO_INCREMENT AS last_id FROM information_schema.TABLES WHERE TABLE_SCHEMA = "kitchgym" AND TABLE_NAME = "workout";`;
     connection.query(GET_WORKOUT, (err, results) => {
         if(err)
             return res.send(err);
@@ -144,17 +144,29 @@ app.get('/get/workout', (req, res) => {
     })
 });
 
-app.get('/workouts/create', (req, res) => {
-    const {u_id, name} = req.query;
-    const ADD_WORKOUT = `INSERT INTO workout(name, user_id) VALUES(\'${name}\', ${u_id})`;
-    connection.query(ADD_WORKOUT, (err, results) => {
+app.get('/add/workout', (req, res) => {
+    const {name, u_id} = req.query;
+    const ADD_WORKOUT = `INSERT INTO workout(name, user_id) VALUES (\'${name}\', ${u_id})`;
+    connection.query(ADD_WORKOUT, (err, results) =>{
+        if(err){
+            console.log(err);
+            res.send(err);
+        } else {
+            console.log("Workout Name added");
+        }
+    });
+
+    const GET_WORKOUT = `SELECT workout_id AS last_id FROM workout ORDER BY workout_id DESC LIMIT 1;`;
+    connection.query(GET_WORKOUT, (err, results) => {
         if(err)
             return res.send(err);
         else {
-            console.log('Workout created')
+            console.log('Workout ID retrieved');
+            return res.json({
+                data: results
+            })
         }
     })
-
 });
 
 app.get('/workouts/fill', (req, res) => {
@@ -170,9 +182,10 @@ app.get('/workouts/fill', (req, res) => {
 
     const PUT_EX = `INSERT INTO we_table(workout_id, exercise_id) SELECT ${w_id}, exercise_id FROM temp_exercises`;
     connection.query(PUT_EX, (err, results) => {
-        if(err)
-            return res.send(err);
-        else {
+            if(err){
+                console.log(err)
+                return res.send(err);
+            } else {
             console.log('Target exercises placed')
             return res.json({
                 data: results
@@ -180,7 +193,6 @@ app.get('/workouts/fill', (req, res) => {
         }
     })
 });
-
 
 app.get('/update/current', (req, res) => {
     const {cur_weight, u_id} = req.query;
