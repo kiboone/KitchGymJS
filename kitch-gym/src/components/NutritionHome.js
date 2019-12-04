@@ -7,9 +7,15 @@ import {
     Button, 
     TextField,
     List,
-    ListItem,
-    Divider
+    Grid,
+    ExpansionPanel,
+    ExpansionPanelDetails,
+    ExpansionPanelSummary,
+    Typography,
+        
  } from '@material-ui/core';
+ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+
 import NutritionFacts from 'nutrition-facts'
 
 
@@ -23,6 +29,9 @@ const styles = {
     },
     button: {
         margin: '15px',
+    },
+    list: {
+        textAlign: 'left',
     }
 
 }
@@ -32,18 +41,25 @@ class NutritionHome extends Component {
         super(props);
         this.state = {
             back: false,
+            done: false,
             results: [],
+            searchName: "",
+            searchProtein: 0,
+            searchCarbs: 0,
+            searchFats: 0, 
             user: [],
         }
         this.goBack = this.goBack.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
+        this.handleButton = this.handleButton.bind(this);
     }
 
     doSearch = (food) => {        
       const NF = new NutritionFacts('Eb2HcdD6nBcHXjVGcODLwGnpjBz6ufLkAzjwM7tp');
         NF.searchFoods({
             q: food,
-            ds: 'Standard Reference'
+            ds: 'Standard Reference',
+            max: 15
         }).then(results => {
             console.log(results.list.item)
             this.setState({results: results.list.item});
@@ -55,7 +71,6 @@ class NutritionHome extends Component {
                 // allowing you to call 'getNutrition' directly on the instance.
                 mySelectedItem.getNutrition()
                 .then(nutritionReport => {
-                    // console.log(nutritionReport)
                     this.showNutrition(nutritionReport)
                 })    
                 .catch(err => {
@@ -68,14 +83,50 @@ class NutritionHome extends Component {
         // console.log(nutritionReport);
         var name = nutritionReport.name;
         var div = document.getElementById("list")
-        var element = document.createElement('ListItem');
+        var element = document.createElement('button');
+        element.onclick= this.handleButton
+        element.id = nutritionReport.ndbno;
         element.innerHTML = name;
         div.appendChild(element);
+    }
+
+    handleButton = (event) => {
+        const foodID = event.target.id;
+        const foodName = event.target.innerHTML;
+        var div = document.getElementById("list")
+        while (div.firstChild) {
+            div.removeChild(div.firstChild);
+        }
+        const NF = new NutritionFacts('Eb2HcdD6nBcHXjVGcODLwGnpjBz6ufLkAzjwM7tp');
+        NF.searchFoods({
+            q: foodName,
+            ds: 'Standard Reference'
+        }).then(results => {
+            console.log(results.list.item)
+            this.setState({results: results.list.item});
+            // Returns search results
+                let mySelectedItem = results.list.item[0];
+                mySelectedItem.getNutrition()
+                .then(nutritionReport => {
+                    // console.log(nutritionReport)
+                    const name = nutritionReport.name;
+                    const proteins = nutritionReport.nutrients[2];
+                    const carbs = nutritionReport.nutrients[4];
+                    this.setState({
+                        searchResult: nutritionReport, done: true})
+                })    
+                .catch(err => {
+                    console.log(err)})
+        }).catch(err => { console.log(err)})
     }
 
     handleSearch = (event) => {
         event.preventDefault()
         const search = event.target.search.value
+        var div = document.getElementById("list")
+        while (div.firstChild) {
+            div.removeChild(div.firstChild);
+        }
         this.doSearch(search);
     }
 
@@ -112,7 +163,8 @@ class NutritionHome extends Component {
     const {
         back,
         user,
-        results
+        searchResult,
+        done,
     } = this.state;
     const {id} =this.props.location.state;
 
@@ -129,7 +181,7 @@ class NutritionHome extends Component {
     if (current_weight < goal_weight) message = "Bulking Season"
     else message = "Cutting Season"
 
-    
+    console.log(searchResult)
 
     return (
         <div className="App">
@@ -155,9 +207,30 @@ class NutritionHome extends Component {
                     </Button>
                 </form>
             </div>
-            <List id="list">
-
-            </List>
+            <List id="list"></List>
+            <Grid>
+                {done && (
+                    <ExpansionPanel id="result">
+                    <ExpansionPanelSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-label="Expand"
+                        aria-controls="additional-actions1-content"
+                        id="additional-actions1-header"
+                    >
+                        {searchResult.name}
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                        <Typography color="textSecondary" className={classes.list}>
+                            <ul>
+                                <li>Proteins: {searchResult.nutrients[2].value}</li>
+                                <li>Carbs: {searchResult.nutrients[4].value}</li>
+                                <li>Fats: {parseInt(searchResult.nutrients[27].value) + parseInt(searchResult.nutrients[28].value)}</li>
+                            </ul>
+                        </Typography>
+                        </ExpansionPanelDetails>
+                    </ExpansionPanel>
+                )}
+            </Grid>
             <Button className={classes.backBut}
                 variant="contained"
                 color="primary"

@@ -164,7 +164,7 @@ class User extends Component {
                     size="large"
                     onClick={this.goToNutritionHome}
                 >
-                    Nutrition Home
+                    Input Macros
                 </Button>
             </div>
         </div>

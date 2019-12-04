@@ -44,7 +44,7 @@ const styles = {
     },
     list: {
       display: 'flex',
-      alignItems: 'left'
+      textAlign: 'left'
     }
 }
 class WorkoutViewer extends Component {
@@ -183,7 +183,7 @@ class WorkoutViewer extends Component {
                     {workout.name}
                   </ExpansionPanelSummary>
                   <ExpansionPanelDetails>
-                    <Typography color="textSecondary">
+                    <Typography color="textSecondary" className={classes.list}>
                       {this.renderExercises(workout.workout_id)}
                     </Typography>
                     </ExpansionPanelDetails>
