@@ -26,6 +26,7 @@ class User extends Component {
         this.state = {
             viewWork: false,
             viewProfile: false,
+            viewNutrition: false,
             createWork: false,
             user: [],
         }
@@ -49,6 +50,10 @@ class User extends Component {
         this.setState({ viewProfile: true });
     }
 
+    goToNutritionHome = () => {
+        this.setState({ viewNutrition: true });
+    }
+
     getUser = () =>{
         const {id } = this.props.location.state;
         fetch(`http://localhost:4000/get/user?u_id=${id}`)
@@ -68,6 +73,7 @@ class User extends Component {
     const {
         viewWork, 
         viewProfile,
+        viewNutrition,
         createWork,
         user
     } = this.state;
@@ -85,6 +91,12 @@ class User extends Component {
     if (viewProfile){
         return <Redirect to={{
                             pathname: '/profile',
+                            state: {id: id}
+                }}/>
+    }
+    if (viewNutrition){
+        return <Redirect to={{
+                            pathname: '/nutritionhome',
                             state: {id: id}
                 }}/>
     }
@@ -142,6 +154,17 @@ class User extends Component {
                     onClick={this.goToProfile}
                 >
                     Fitness Profile
+                </Button>
+            </div>
+            <div>
+                <Button className={classes.button}
+                    variant="contained"
+                    color="primary"
+                    margin="normal"
+                    size="large"
+                    onClick={this.goToNutritionHome}
+                >
+                    Nutrition Home
                 </Button>
             </div>
         </div>

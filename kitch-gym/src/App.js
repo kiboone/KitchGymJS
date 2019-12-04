@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Login from './components/Login';
 import WorkoutViewer from './components/WorkoutViewer';
 import WorkoutCreator from './components/WorkoutCreator';
+import NutritionHome from './components/NutritionHome';
 import User from './components/User';
 import Profile from './components/Profile';
 
@@ -23,6 +24,7 @@ class App extends Component {
               <Route exact path='/workoutcreator' component={WorkoutCreator} />
               <Route exact path='/user' component={User} />
               <Route exact path='/profile' component={Profile} />
+              <Route exact path='/nutritionhome' component={NutritionHome} />
           </Switch>
         </div>
       </Router>
