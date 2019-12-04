@@ -93,7 +93,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `username` varchar(45) DEFAULT NULL,
   `password` varchar(45) DEFAULT NULL,
   `goal_weight` int(11) DEFAULT NULL,
-  `start_date` date DEFAULT curdate(),
+  `start_date` timestamp DEFAULT CURRENT_TIMESTAMP,
   `curr_weight` int(11) DEFAULT NULL,
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
