@@ -32,22 +32,20 @@ class NutritionHome extends Component {
         this.handleSearch = this.handleSearch.bind(this);
     }
 
-    apiTest = () => {
-        
-   
-        const NF = new NutritionFacts(process.env.USDA_NDB_API_KEY);
-    
+    doSearch = (food) => {        
+      const NF = new NutritionFacts('Eb2HcdD6nBcHXjVGcODLwGnpjBz6ufLkAzjwM7tp');
         NF.searchFoods({
-            q: 'salted butter',
+            q: food,
             ds: 'Standard Reference'
         }).then(results => {
             // Returns search results
             let mySelectedItem = results.list.item[0]
-            
             // Items are returned as a FoodItem instance
             // allowing you to call 'getNutrition' directly on the instance.
-            mySelectedItem.getNutrition().then(nutritionReport => {
-                console.log(nutritionReport)}).catch(err => {
+            mySelectedItem.getNutrition()
+            .then(nutritionReport => {
+                console.log(nutritionReport.nutrients[2].value)})
+            .catch(err => {
                 console.log(err)})
         }).catch(err => { console.log(err)})
     }
@@ -55,7 +53,7 @@ class NutritionHome extends Component {
     handleSearch = (event) => {
         event.preventDefault()
         const search = event.target.search.value
-        console.log(search + " searched")
+        this.doSearch(search);
     }
 
     goBack = () => {
