@@ -52,6 +52,7 @@ class NutritionHome extends Component {
         this.goBack = this.goBack.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
         this.handleButton = this.handleButton.bind(this);
+        this.addMacros = this.addMacros.bind(this);
     }
 
     doSearch = (food) => {        
@@ -84,10 +85,13 @@ class NutritionHome extends Component {
         var name = nutritionReport.name;
         var div = document.getElementById("list")
         var element = document.createElement('button');
+        var br = document.createElement('br');
         element.onclick= this.handleButton
         element.id = nutritionReport.ndbno;
         element.innerHTML = name;
         div.appendChild(element);
+        div.appendChild(br);
+
     }
 
     handleButton = (event) => {
@@ -98,6 +102,7 @@ class NutritionHome extends Component {
             div.removeChild(div.firstChild);
         }
         const NF = new NutritionFacts('Eb2HcdD6nBcHXjVGcODLwGnpjBz6ufLkAzjwM7tp');
+        // Nutrition Food search feature
         NF.searchFoods({
             q: foodName,
             ds: 'Standard Reference'
@@ -131,15 +136,17 @@ class NutritionHome extends Component {
     }
 
     addMacros = (searchResult) => {
-        var proteins = parseInt(searchResult.nutrients[2].value)
-        var carbs = parseInt(searchResult.nutrients[4].value)
-        var fats = parseInt(searchResult.nutrients[27].value) + parseInt(searchResult.nutrients[28].value)
+        var proteins = parseFloat(searchResult.nutrients[2].value)
+        var carbs = parseFloat(searchResult.nutrients[4].value)
+        var fats = parseFloat(searchResult.nutrients[27].value) + parseFloat(searchResult.nutrients[28].value)
         
         // Calorie Calculation:
         //      1g protein = 4 cals
         //      1g carbs = 4 cals
         //      1g fats = 9 cals
-        var total_cals = (proteins * 4) + (carbs * 4) + (fats * 9)
+        const {user} = this.state;
+        var total_cals = user[0].daily_cals;
+        total_cals += (proteins * 4) + (carbs * 4) + (fats * 9)
 
         this.updateCalories(total_cals);
         window.location.reload(true)
@@ -247,7 +254,7 @@ class NutritionHome extends Component {
                                 <ul>
                                     <li>Proteins: {searchResult.nutrients[2].value} grams</li>
                                     <li>Carbs: {searchResult.nutrients[4].value} grams</li>
-                                    <li>Fats: {parseInt(searchResult.nutrients[27].value) + parseInt(searchResult.nutrients[28].value)} grams</li>
+                                    <li>Fats: {parseFloat(searchResult.nutrients[27].value) + parseFloat(searchResult.nutrients[28].value)} grams</li>
                                 </ul>
                             </Typography>
                             </ExpansionPanelDetails>
