@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Switch, Route, Link, Redirect } from 'react-ro
 import '.././App.css';
 import { withStyles } from '@material-ui/styles';
 import PropTypes from 'prop-types';
+import NutritionFacts from 'nutrition-facts'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { 
     Button, 
     TextField,
@@ -12,11 +14,11 @@ import {
     ExpansionPanelDetails,
     ExpansionPanelSummary,
     Typography,
+    Select,
+    MenuItem
         
  } from '@material-ui/core';
- import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-import NutritionFacts from 'nutrition-facts'
 
 
 const styles = {
@@ -57,19 +59,21 @@ class NutritionHome extends Component {
             searchCarbs: 0,
             searchFats: 0, 
             user: [],
+            num: 5
         }
         this.goBack = this.goBack.bind(this);
+        this.handleDropdown = this.handleDropdown.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
         this.handleButton = this.handleButton.bind(this);
         this.addMacros = this.addMacros.bind(this);
     }
 
-    doSearch = (food) => {        
+    doSearch = (food, num) => {        
       const NF = new NutritionFacts('Eb2HcdD6nBcHXjVGcODLwGnpjBz6ufLkAzjwM7tp');
         NF.searchFoods({
             q: food,
             ds: 'Standard Reference',
-            max: 15
+            max: num
         }).then(results => {
             console.log(results.list.item)
             this.setState({results: results.list.item});
@@ -103,9 +107,14 @@ class NutritionHome extends Component {
 
     }
 
+    handleDropdown = (event) => {
+        this.setState({num : event.target.value})
+      };
+
     handleButton = (event) => {
         const foodID = event.target.id;
         const foodName = event.target.innerHTML;
+        const num = event.target.num
         var div = document.getElementById("list")
         while (div.firstChild) {
             div.removeChild(div.firstChild);
@@ -114,7 +123,8 @@ class NutritionHome extends Component {
         // Nutrition Food search feature
         NF.searchFoods({
             q: foodName,
-            ds: 'Standard Reference'
+            ds: 'Standard Reference',
+            max: num
         }).then(results => {
             console.log(results.list.item)
             this.setState({results: results.list.item});
@@ -191,6 +201,7 @@ class NutritionHome extends Component {
         user,
         searchResult,
         done,
+        num
     } = this.state;
     const {id} =this.props.location.state;
 
@@ -233,6 +244,16 @@ class NutritionHome extends Component {
                     >
                         Search
                     </Button>
+                    <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={num}
+                        onChange={this.handleDropdown}
+                    >
+                        <MenuItem value={5}>5</MenuItem>
+                        <MenuItem value={15}>15</MenuItem>
+                        <MenuItem value={30}>30</MenuItem>
+                    </Select>
                 </form>
             </div>            
 
