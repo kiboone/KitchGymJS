@@ -243,8 +243,8 @@ app.get('/update/calories', (req, res) => {
 });
 
 app.get('/update/date', (req, res) => {
-    const {u_id} = req.query;
-    const UPDATE_DATE  = `UPDATE user SET start_date=CURRENT_DATE WHERE user_id=${u_id}`;
+    const {u_id, date} = req.query;
+    const UPDATE_DATE  = `UPDATE user SET start_date=${date} WHERE user_id=${u_id}`;
     connection.query(UPDATE_DATE, (err, results) => {
         if(err){
             console.log(err)
