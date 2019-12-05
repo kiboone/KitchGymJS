@@ -242,6 +242,22 @@ app.get('/update/calories', (req, res) => {
     });
 });
 
+app.get('/update/date', (req, res) => {
+    const {u_id} = req.query;
+    const UPDATE_DATE  = `UPDATE user SET start_date=CURRENT_DATE WHERE user_id=${u_id}`;
+    connection.query(UPDATE_DATE, (err, results) => {
+        if(err){
+            console.log(err)
+            return res.send(err);
+        }else {
+            console.log('User date updated')
+            return res.json({
+                data: results
+            })
+        }
+    });
+});
+
 
 
 app.listen(4000, () => {

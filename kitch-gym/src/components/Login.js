@@ -93,6 +93,24 @@ class Login extends Component {
         if(password === users[i].password){
             // this.props.history.push('/client', {id: users[i].id});
             console.log("User ID:", users[i].user_id);
+            var date = new Date();
+            date = date.toISOString()
+            console.log(date)
+            console.log(users[i].start_date);
+      
+            // DATE CHECK
+            // var flag = false;
+            // for(var j =0; j < 10 ;j++){
+            //   if (users[i].start_date[j] !== date[j])
+            //     console.log("USER", users[i].start_date[j])
+            //     console.log("COMP", date[j])
+            //     flag = true;
+            // }
+            // if (flag){
+            //   this.updateTime(users[i].user_id);
+            //   this.updateCalories(0, users[i].user_id);
+            // }
+
             this.setState({validLogin: true, id: users[i].user_id});
         }
       }
@@ -104,6 +122,18 @@ class Login extends Component {
       .then(response => response.json())
       .catch(err => console.error(err));
   }
+
+  updateTime = (id) => {
+    fetch(`http://localhost:4000/update/date?u_id=${id}` )
+      .then(response => response.json())
+      .catch(err => console.error(err));
+  }
+
+  updateCalories = (calories, id) => {
+    fetch(`http://localhost:4000/update/calories?cals=${calories}&u_id=${id}`)
+    .then(response => response.json())
+    .catch(err => console.error(err));
+}
 
   getUsers = () => {
     fetch('http://localhost:4000/get/users' )
