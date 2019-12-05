@@ -67,7 +67,7 @@ class Login extends Component {
     if (weightCurr < 0){
       err[5] = true;
       valid = false;
-    }git 
+    }
     if (weightGoal < 0){
       err[7] = true;
       valid = false;
