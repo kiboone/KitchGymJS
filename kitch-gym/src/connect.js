@@ -6,10 +6,11 @@ const app = express();
 
 //NEEDS TO BE CHANGED IF USING SERVER OTHER THAN XAMPP
 const connection = mysql.createConnection({
-    host: 'localhost',
+    host: '127.0.0.1',
     user: 'root',
     password: '',
     database: 'kitchgym',
+    port: '3306'
 });
 
 connection.connect(err => {
@@ -54,8 +55,10 @@ app.get('/get/user', (req, res) => {
 });
 
 app.get('/add/user', (req, res) => {
-    const {name, username, password, weightCurr, weightGoal} = req.query;
-    const ADD_USER  = `INSERT INTO user(name, username, password, curr_weight, goal_weight) VALUES (\'${name}\',\'${username}\',\'${password}\', ${weightCurr}, ${weightGoal})`;
+    const {name, username, password, weightCurr, weightGoal, currDate} = req.query;
+    console.log("Name: " + name);
+    console.log("Date: " + currDate);
+    const ADD_USER  = `INSERT INTO user(name, username, password, curr_weight, goal_weight, start_date) VALUES (\'${name}\',\'${username}\',\'${password}\', ${weightCurr}, ${weightGoal}, \'${currDate}\')`;
     connection.query(ADD_USER, (err, results) => {
         if(err){
             console.log(err);
@@ -235,6 +238,37 @@ app.get('/update/calories', (req, res) => {
             return res.send(err);
         }else {
             console.log('User calories updated')
+            return res.json({
+                data: results
+            })
+        }
+    });
+});
+
+app.get('/add/calorielog', (req, res) => {
+    const {u_id} = req.query;
+    const ADD_LOG  = `INSERT INTO cal_tracker(user_calories, date, u_id) SELECT daily_cals, start_date, user_id FROM user WHERE user_id=${u_id}`;
+    connection.query(ADD_LOG, (err, results) => {
+        if(err){
+            console.log(err)
+            return res.send(err);
+        }else {
+            console.log('Calorie log added');
+            return res.json({
+                data: results
+            })
+        }
+    });
+});
+
+app.get('/get/calorielog', (req, res) => {
+    const {u_id} = req.query;
+    const GET_CALSLOG = `SELECT * FROM cal_tracker WHERE u_id=${u_id}`;
+    connection.query(GET_CALSLOG, (err, results) => {
+        if(err)
+            return res.send(err);
+        else {
+            console.log('Calorie Log retrieved');
             return res.json({
                 data: results
             })

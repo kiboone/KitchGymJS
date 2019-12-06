@@ -29,6 +29,11 @@ const styles = {
         left: '10px',
         top: '10px',
     },
+    logBut: {
+        position: 'relative',
+        right: '235px',
+        top: '55px',
+    },
     button: {
         margin: '15px',
     },
@@ -57,7 +62,7 @@ class NutritionHome extends Component {
         super(props);
         this.state = {
             back: false,
-            done: false,
+            viewNutritionLog: false,
             results: [],
             searchName: "",
             searchProtein: 0,
@@ -175,6 +180,9 @@ class NutritionHome extends Component {
         window.location.reload(true)
     }
 
+    goToCalorieLog = () => {
+        this.setState({ viewNutritionLog: true });
+    }
 
     goBack = () => {
         this.setState({ back: true})
@@ -209,7 +217,8 @@ class NutritionHome extends Component {
         user,
         searchResult,
         done,
-        num
+        num,
+        viewNutritionLog
     } = this.state;
     const {id} =this.props.location.state;
 
@@ -217,6 +226,13 @@ class NutritionHome extends Component {
     if(back){
         return <Redirect to={{
             pathname: '/user',
+            state: {id: id}
+        }}/>
+    }
+
+    if(viewNutritionLog){
+        return <Redirect to={{
+            pathname: '/nutritionlog',
             state: {id: id}
         }}/>
     }
@@ -233,9 +249,16 @@ class NutritionHome extends Component {
                    Input Your Macros                 
                 </h1>
             </header>
-            <h2>
-                Total Calories for Today: {daily_cals}
-            </h2>
+                <Button className={classes.logBut}
+                            variant="contained"
+                            color="primary"
+                            size="medium"
+                            onClick={this.goToCalorieLog}
+                            >Calorie Log
+                </Button>
+                <h2>
+                    Total Calories for Today: {daily_cals}
+                </h2>
             <div>
                 <form onSubmit = {this.handleSearch}>
                     <TextField
@@ -251,19 +274,18 @@ class NutritionHome extends Component {
                         className={classes.searchButton}
                     >
                         Search
-                    </Button>
-                
-                        <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            value={num}
-                            onChange={this.handleDropdown}
-                            className={classes.searchNum}
+                    </Button>                
+                    <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={num}
+                        onChange={this.handleDropdown}
+                        className={classes.searchNum}
                         >
-                            <MenuItem value={10}>10</MenuItem>
-                            <MenuItem value={15}>15</MenuItem>
-                            <MenuItem value={30}>30</MenuItem>
-                        </Select>
+                        <MenuItem value={10}>10</MenuItem>
+                        <MenuItem value={15}>15</MenuItem>
+                        <MenuItem value={30}>30</MenuItem>
+                    </Select>
                 </form>
             </div>            
 
@@ -312,9 +334,7 @@ class NutritionHome extends Component {
                 color="primary"
                 size="small"
                 onClick={this.goBack}
-            >
-                Back
-            </Button>
+            >Back</Button>
         </div>
         
     );

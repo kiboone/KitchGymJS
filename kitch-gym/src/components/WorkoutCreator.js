@@ -90,6 +90,7 @@ class WorkoutCreator extends Component {
         // calulate how many of each exercise to pull from database
         const numEach = 12/count;
         const{workout_id} = this.state;
+        console.log(workout_id);
         const w_id = workout_id[0].last_id;
         console.log(w_id)
         this.createWorkout(name);

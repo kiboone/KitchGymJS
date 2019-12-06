@@ -44,12 +44,18 @@ class Login extends Component {
 
   validateUserForm = (event) => {
     event.preventDefault();
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+
     const username = event.target.username.value;
     const password1 = event.target.password1.value;
     const password2 = event.target.password2.value;
     const name = event.target.name.value;
     const weightCurr = event.target.weightCurr.value;
     const weightGoal = event.target.weightGoal.value;
+    const currDate = yyyy + "-" + mm + "-" + dd;
 
     var err = [false, false, false, false, false, 
       false, false, false, false, false, false, false];
@@ -75,7 +81,7 @@ class Login extends Component {
 
     if(valid){
       console.log("Adding user");
-      this.addUser(name, username, password1, weightCurr, weightGoal);
+      this.addUser(name, username, password1, weightCurr, weightGoal, currDate);
       window.location.reload(true); 
     }
     
@@ -101,6 +107,7 @@ class Login extends Component {
             }
             
             if (!flag){
+              this.addLog(users[i].user_id);
               this.updateCalories(0, users[i].user_id);
               date = "\'" + date + "\'"
               this.updateTime(date, users[i].user_id);
@@ -112,13 +119,21 @@ class Login extends Component {
     }
   }
   
-  addUser = (name, username, password, weightCurr, weightGoal) => {
-    fetch(`http://localhost:4000/add/user?name=${name}&username=${username}&password=${password}&weightCurr=${weightCurr}&weightGoal=${weightGoal}`)
+  addUser = (name, username, password, weightCurr, weightGoal, currDate) => {
+    fetch(`http://localhost:4000/add/user?name=${name}&username=${username}&password=${password}&weightCurr=${weightCurr}&weightGoal=${weightGoal}&currDate=${currDate}`)
       .then(response => response.json())
       .catch(err => console.error(err));
   }
 
+  addLog = (id) => {
+    console.log("userid: " + id);
+    fetch(`http://localhost:4000/add/calorielog?u_id=${id}`)
+    .then(response => response.json())
+    .catch(err => console.error(err));
+  }
+
   updateTime = (date, id) => {
+    console.log("Ussser ID: " + id);
     fetch(`http://localhost:4000/update/date?date=${date}&u_id=${id}` )
       .then(response => response.json())
       .catch(err => console.error(err));

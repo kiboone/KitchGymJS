@@ -4,6 +4,7 @@ import Login from './components/Login';
 import WorkoutViewer from './components/WorkoutViewer';
 import WorkoutCreator from './components/WorkoutCreator';
 import NutritionHome from './components/NutritionHome';
+import NutritionLog from './components/NutritionLog';
 import User from './components/User';
 import Profile from './components/Profile';
 
@@ -24,6 +25,7 @@ class App extends Component {
               <Route exact path='/user' component={User} />
               <Route exact path='/profile' component={Profile} />
               <Route exact path='/nutritionhome' component={NutritionHome} />
+              <Route exact path='/nutritionlog' component={NutritionLog} />
           </Switch>
         </div>
       </Router>
