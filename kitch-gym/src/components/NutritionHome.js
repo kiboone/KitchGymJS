@@ -287,6 +287,7 @@ class NutritionHome extends Component {
                             <ExpansionPanelDetails>
                                 <Typography color="textSecondary" className={classes.list}>
                                     <ul>
+                                        <p>Calories: {(4 * searchResult.nutrients[2].value) + (4 * searchResult.nutrients[4].value) + (9 * (parseFloat(searchResult.nutrients[27].value) + parseFloat(searchResult.nutrients[28].value)))}</p>
                                         <li>Proteins: {searchResult.nutrients[2].value} grams</li>
                                         <li>Carbs: {searchResult.nutrients[4].value} grams</li>
                                         <li>Fats: {parseFloat(searchResult.nutrients[27].value) + parseFloat(searchResult.nutrients[28].value)} grams</li>
