@@ -1,19 +1,11 @@
 # KitchGymJS
 
-KitchGym is a web-based application used for personal fitness and nutrition.
+KitchGym is a web-based application used for managing personal fitness and nutrition. A simple user interface allows the user create an account and sign into the application. The application is split into two main functionailites: the "Kitchen" and the "Gym". On the gym side, users can create a view custom workouts. Users selected their desired target muscle groups, and a workout of randomly selected exercises matching those muscle groups will be created and saved. These workouts, and their exercises, can be viewed in another page of the application. We believe that healthy choices start with mindful behavior, and the bests way to analyze one's own eating habits is to track them over time. On the Kitchen side, users can search for foods they have eaten to view their macros and add them to their total calorie count. Users can track their daily total calories in the "Calorie Log".
 
-The website allows users to create an account to sign-in and save their KitchGym information such as workouts and foods.
+## Set-up
+xampp - host local MySql server  
+npm run start - start React application  
+node connect.js (in src) - start node.js  
 
-A simple user interface allows the user to move seamlessly between inputting food and finding and documenting workouts.
-
-KITCH
-
-The website has a place for users to input the food/calories they are consuming to promote more mindful eating habits.
-
-We believe that healthy choices start with mindful behavior, and the bests way to analyze one's own eating habits is to track them over time.  Knowledge is power, and KitchGym gives the user the power to know when they are succeeding nutritionally and when they are falling off.
-
-GYM
-
-On the gym side, users can select the muscle groups they would like to target in their workout and receive a personalized set of exercises for their workout. 
-
-Exercise can be intimidating, but KitchGym makes it easy to get what you need from your regiments.
+## APIs
+Nutrition Facts: This API is NodeJs wrapper of the USDA Food Composition Database API (NDB API), which provides the ability to search a large database of food items, and returns their individual macro values, such as proteins, carbohydrates, and fats.
