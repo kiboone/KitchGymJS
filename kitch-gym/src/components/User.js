@@ -27,6 +27,12 @@ const styles = {
         position: 'relative',
         right: '9px'
     },
+    button5: {
+        margin: '15px',
+        marginRight: '-295px',
+    },
+    
+
 
 }
 
@@ -37,6 +43,7 @@ class User extends Component {
             viewWork: false,
             viewProfile: false,
             viewNutrition: false,
+            viewLog: false,
             createWork: false,
             user: [],
         }
@@ -63,6 +70,10 @@ class User extends Component {
         this.setState({ viewNutrition: true });
     }
 
+    goToNutritionLog = () => {
+        this.setState({ viewLog: true });
+    }
+
     getUser = () =>{
         const {id } = this.props.location.state;
         fetch(`http://localhost:4000/get/user?u_id=${id}`)
@@ -83,6 +94,7 @@ class User extends Component {
         viewWork, 
         viewProfile,
         viewNutrition,
+        viewLog,
         createWork,
         user
     } = this.state;
@@ -106,6 +118,12 @@ class User extends Component {
     if (viewNutrition){
         return <Redirect to={{
                             pathname: '/nutritionhome',
+                            state: {id: id}
+                }}/>
+    }
+    if (viewLog){
+        return <Redirect to={{
+                            pathname: '/nutritionlog',
                             state: {id: id}
                 }}/>
     }
@@ -173,6 +191,18 @@ class User extends Component {
                         onClick={this.goToNutritionHome}
                     >
                         Input Macros
+                    </Button>
+                    
+                </div>
+                <div>
+                    <Button className={classes.button5}
+                        variant="contained"
+                        color="primary"
+                        margin="normal"
+                        size="large"
+                        onClick={this.goToNutritionLog}
+                    >
+                        Calorie Log
                     </Button>
                     
                 </div>

@@ -287,15 +287,6 @@ class NutritionHome extends Component {
         <header className="App-header">
           <h1>Input Your Macros</h1>
         </header>
-        <Button
-          className={classes.logBut}
-          variant="contained"
-          color="primary"
-          size="medium"
-          onClick={this.goToCalorieLog}
-        >
-          Calorie Log
-        </Button>
         <h2>Total Calories for Today: {daily_cals}</h2>
         <div>
           <form onSubmit={this.handleSearch}>

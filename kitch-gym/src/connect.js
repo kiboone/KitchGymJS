@@ -6,11 +6,10 @@ const app = express();
 
 //NEEDS TO BE CHANGED IF USING SERVER OTHER THAN XAMPP
 const connection = mysql.createConnection({
-  host: "127.0.0.1",
-  user: "root",
-  password: "root",
+  host: 'localhost',
+  user: 'root',
+  password: '',
   database: "kitchgym",
-  port: "8889"
 });
 
 connection.connect(err => {
